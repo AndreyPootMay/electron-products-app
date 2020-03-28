@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add new product</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css">
+</head>
+<body>
+    <form id="productForm" class="p-4">
+        <div class="form-group">
+            <input type="text" name="name" id="name" class="form-control" placeholder="Product name" autofocus>
+        </div>
+        <div class="form-group">
+            <input type="text" name="price" id="price" class="form-control" placeholder="Price">
+        </div>
+        <div class="form-group">
+            <input type="text" name="description" id="description" class="form-control" placeholder="Product Description">
+        </div>
+
+        <button class="btn btn-primary">
+            Save product
+        </button>
+    </form>
+    <script>
+        const elec = require('electron');
+        const { ipcRenderer } = elec;
+
+        const form = document.querySelector('#productForm');
+
+        form.addEventListener('submit', e => {
+            const nameProduct = document.querySelector('#name').value;
+            const priceProduct = document.querySelector('#price').value;
+            const descriptionProduct = document.querySelector('#description').value;
+            
+            const newProduct = {
+                name: nameProduct,
+                price: priceProduct,
+                description: descriptionProduct
+            };
+
+            ipcRenderer.send('new:product', newProduct);
+
+            e.preventDefault();
+        });
+    </script>
+</body>
+
+</html>
+
+
+<div class="col-xs-4 p-2">
+    <div class="card text-center">
+        <div class="card-header"></div>
+        <div class="card-body"></div>
+        <div class="card-footer">
+            <div class="btn btn-outline-danger btn-sm">Delete</div>
+
+        </div>
+    </div>
+</div>

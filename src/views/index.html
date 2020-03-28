@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products electron</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container p-4">
+        <div id="products" class="row">
+
+        </div>
+    </div>
+
+    <script>
+        const elec = require('electron');
+        const { ipcRenderer } = elec;
+
+        const products = document.querySelector("#products")
+
+        ipcRenderer.on('new:product', (e, newProduct) => {
+            const newProductTemplate = `
+                <div class="col-xs-4 p-2">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            ${newProduct.name}
+                        </div>
+                        <div class="card-body">
+                            ${newProduct.price}
+                            <hr/>
+                            ${newProduct.description}
+                        </div>
+                        <div class="card-footer">
+                            <div class="btn btn-outline-danger btn-sm">Delete</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            products.innerHTML += newProductTemplate;
+
+            const btns = document.querySelectorAll('.btn.btn-outline-danger');
+            btns.forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.target.parentElement.parentElement.parentElement.remove();
+                });
+            });
+        });
+
+        ipcRenderer.on('products:remove-all', e => {
+            console.log(`Removing all`);
+            products.innerHTML = '';
+        });
+    </script>
+</body>
+
+</html>
